@@ -35,7 +35,7 @@ public class questionTwo {
     }
     private static JTextArea createParentUI(JFrame frame) {
 
-        JTextArea field = new JTextArea(30,1);
+        JTextArea field = new JTextArea(20, 1);
         field.setBounds(rect.r4);
         field.setEditable(false);
 
