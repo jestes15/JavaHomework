@@ -80,42 +80,10 @@ public class questionTwo {
         JTextField price = new JTextField("Price");
         JTextField ISBN = new JTextField("ISBN");
 
-        title.setForeground(Color.GRAY);
-        title.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (title.getText().equals("Title")) {
-                    title.setText("");
-                    title.setForeground(Color.BLACK);
-                }
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (title.getText().isEmpty()) {
-                    title.setForeground(Color.GRAY);
-                    title.setText("Title");
-                }
-            }
-        });
-
-        author.setForeground(Color.GRAY);
-        author.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (author.getText().equals("Title")) {
-                    author.setText("");
-                    author.setForeground(Color.BLACK);
-                }
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (author.getText().isEmpty()) {
-                    author.setForeground(Color.GRAY);
-                    author.setText("Title");
-                }
-            }
-        });
-
+        makeActive(title, "Title");
+        makeActive(author, "Author");
+        makeActive(price, "Price");
+        makeActive(ISBN, "ISBN");
 
         title.setBounds(rect.TITLE_RECT);
         author.setBounds(rect.AUTHOR_RECT);
@@ -141,6 +109,26 @@ public class questionTwo {
         });
 
         frame.add(submit);
+    }
+
+    private static void makeActive(JTextField field, String tempText) {
+        field.setForeground(Color.GRAY);
+        field.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (field.getText().equals(tempText)) {
+                    field.setText("");
+                    field.setForeground(Color.BLACK);
+                }
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (field.getText().isEmpty()) {
+                    field.setForeground(Color.GRAY);
+                    field.setText(tempText);
+                }
+            }
+        });
     }
 }
 
