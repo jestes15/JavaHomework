@@ -6,6 +6,7 @@ class rectQ3 {
     static Rectangle comboBox_RECT = new Rectangle(5, 35, 75, 25);
     static Rectangle MAKE_RECT = new Rectangle(5, 65, 250, 25);
     static Rectangle MODEL_RECT = new Rectangle(5, 95, 150, 25);
+    static Rectangle amntOfOwners_RECT = new Rectangle(5, 125, 75, 25);
 
     static Integer[] years = new Integer[]{2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012,
             2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020};
@@ -45,10 +46,14 @@ public class questionThree {
         JTextField modelField = new JTextField();
         modelField.setBounds(rectQ3.MODEL_RECT);
 
+        JTextField amntOfOwnersField = new JTextField();
+        amntOfOwnersField.setBounds(rectQ3.amntOfOwners_RECT);
+
         frame.add(fieldID);
         frame.add(box);
         frame.add(MakeBox);
         frame.add(modelField);
+        frame.add(amntOfOwnersField);
     }
 }
 

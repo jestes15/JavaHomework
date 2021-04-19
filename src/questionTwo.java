@@ -22,9 +22,11 @@ final class rect {
 
 public class questionTwo {
     public static void main(String[] args) {
+        Stack<Book> bookStack = new Stack<>();
+
         JFrame frame = new JFrame();
-        JTextArea field = createParentUI(frame);
-        addBookUI(frame, field);
+        JTextArea field = createParentUI(frame, bookStack);
+        addBookUI(frame, field, bookStack);
 
         frame.setSize(700,500);
         frame.setResizable(false);
@@ -33,12 +35,11 @@ public class questionTwo {
         frame.setTitle("Library");
         frame.setVisible(true);
     }
-    private static JTextArea createParentUI(JFrame frame) {
+    private static JTextArea createParentUI(JFrame frame, Stack<Book> bookStack) {
 
-        JTextArea field = new JTextArea(20, 1);
+        JTextArea field = new JTextArea(12, 1);
         field.setBounds(rect.r4);
         field.setEditable(false);
-
         frame.add(field);
 
         JButton push = new JButton("push");
@@ -74,7 +75,7 @@ public class questionTwo {
 
         return field;
     }
-    private static void addBookUI(JFrame frame, JTextArea field) {
+    private static void addBookUI(JFrame frame, JTextArea field, Stack<Book> bookStack) {
         JTextField title = new JTextField("Title");
         JTextField author = new JTextField("Author");
         JTextField price = new JTextField("Price");
@@ -100,17 +101,15 @@ public class questionTwo {
         submit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String info = title.getText() + "\n" +
-                        author.getText() + "\n" +
-                        price.getText() + "\n" +
-                        ISBN.getText() + "\n";
+                Book b = new Book(title.getText(), author.getText(), price.getText(), ISBN.getText());
+                bookStack.add(b);
+                String info = title.getText() + "\n";
                 field.append(info);
             }
         });
 
         frame.add(submit);
     }
-
     private static void makeActive(JTextField field, String tempText) {
         field.setForeground(Color.GRAY);
         field.addFocusListener(new FocusListener() {
@@ -133,7 +132,31 @@ public class questionTwo {
 }
 
 class Book {
-    public String[] createBook() {
-        return new String[]{"Hello", "Hello"};
+    private String title;
+    private String author;
+    private String price;
+    private String ISBN;
+
+    Book(String title, String author, String price, String ISBN) {
+        this.title = title;
+        this.author = author;
+        this.price = price;
+        this.ISBN = ISBN;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public String getISBN() {
+        return ISBN;
     }
 }
