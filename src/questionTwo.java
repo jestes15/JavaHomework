@@ -1,5 +1,3 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Stack;
@@ -7,10 +5,11 @@ import javax.swing.*;
 import java.awt.*;
 
 final class rect {
-    static Rectangle r1 = new Rectangle(5, 5, 75, 25);
+    static Rectangle r1 = new Rectangle(470, 95, 150, 25);
+
     static Rectangle r2 = new Rectangle(5, 35, 75, 25);
-    static Rectangle r3 = new Rectangle(5, 65, 75, 25);
-    static Rectangle r4 = new Rectangle(5, 100, 300, 300);
+    static Rectangle r3 = new Rectangle(90, 35, 75, 25);
+    static Rectangle r4 = new Rectangle(5, 100, 300, 303);
 
     static Rectangle TITLE_RECT = new Rectangle(350, 35, 115, 25);
     static Rectangle AUTHOR_RECT = new Rectangle(350, 65, 115, 25);
@@ -18,6 +17,22 @@ final class rect {
     static Rectangle ISBN_RECT = new Rectangle(350, 125, 115, 25);
 
     static Rectangle SUBMIT = new Rectangle(470, 125, 85, 25);
+    static Rectangle PEEK_DATA_RECT = new Rectangle(350, 160, 150, 150);
+}
+
+record Book(String title, String author, String price, String ISBN) {
+    public String getTitle() {
+        return title;
+    }
+    public String getAuthor() {
+        return author;
+    }
+    public String getPrice() {
+        return price;
+    }
+    public String getISBN() {
+        return ISBN;
+    }
 }
 
 public class questionTwo {
@@ -37,39 +52,29 @@ public class questionTwo {
     }
     private static JTextArea createParentUI(JFrame frame, Stack<Book> bookStack) {
 
-        JTextArea field = new JTextArea(12, 1);
+        JTextArea field = new JTextArea(20, 1);
+        JTextArea fieldBookInfo = new JTextArea(4, 1);
         field.setBounds(rect.r4);
+        fieldBookInfo.setBounds(rect.PEEK_DATA_RECT);
         field.setEditable(false);
+        fieldBookInfo.setEditable(false);
         frame.add(field);
-
-        JButton push = new JButton("push");
-        push.setBounds(rect.r1);
-        push.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                field.append("Push Append works\n");
-            }
-        });
+        frame.add(fieldBookInfo);
 
         JButton pop = new JButton("pop");
         pop.setBounds(rect.r2);
-        pop.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                field.append("Pop works\n");
-            }
+        pop.addActionListener(e -> {
+            bookStack.pop();
+            updateUI(field, bookStack);
         });
 
         JButton peek = new JButton("peek");
         peek.setBounds(rect.r3);
-        peek.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                field.append("Peek works\n");
-            }
+        peek.addActionListener(e -> {
+            Book obj = bookStack.peek();
+            showBookInfo(fieldBookInfo, obj);
         });
 
-        frame.add(push);
         frame.add(pop);
         frame.add(peek);
 
@@ -81,10 +86,15 @@ public class questionTwo {
         JTextField price = new JTextField("Price");
         JTextField ISBN = new JTextField("ISBN");
 
+        JTextField errorField = new JTextField();
+
         makeActive(title, "Title");
         makeActive(author, "Author");
         makeActive(price, "Price");
         makeActive(ISBN, "ISBN");
+
+        errorField.setBounds(rect.r1);
+        errorField.setEditable(false);
 
         title.setBounds(rect.TITLE_RECT);
         author.setBounds(rect.AUTHOR_RECT);
@@ -95,17 +105,17 @@ public class questionTwo {
         frame.add(author);
         frame.add(price);
         frame.add(ISBN);
+        frame.add(errorField);
 
-        JButton submit = new JButton("Submit");
+        JButton submit = new JButton("Push");
         submit.setBounds(rect.SUBMIT);
-        submit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Book b = new Book(title.getText(), author.getText(), price.getText(), ISBN.getText());
-                bookStack.add(b);
-                String info = title.getText() + "\n";
-                field.append(info);
-            }
+        submit.addActionListener(e -> {
+            Book b = new Book(title.getText(), author.getText(), price.getText(), ISBN.getText());
+            if (bookStack.size() < 20)
+                bookStack.push(b);
+            else
+                errorField.setText("Error, too many books!");
+            updateUI(field, bookStack);
         });
 
         frame.add(submit);
@@ -129,34 +139,18 @@ public class questionTwo {
             }
         });
     }
-}
-
-class Book {
-    private String title;
-    private String author;
-    private String price;
-    private String ISBN;
-
-    Book(String title, String author, String price, String ISBN) {
-        this.title = title;
-        this.author = author;
-        this.price = price;
-        this.ISBN = ISBN;
+    private static void updateUI(JTextArea field, Stack<Book> bookStack) {
+        field.setText("");
+        for (Book book : bookStack) {
+            field.append(book.getTitle() + "\n");
+        }
     }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public String getISBN() {
-        return ISBN;
+    private static void showBookInfo(JTextArea field, Book obj) {
+        field.setText("");
+        String text = obj.getTitle() + "\n" +
+                obj.getAuthor() + "\n" +
+                obj.getPrice() + "\n" +
+                obj.getISBN();
+        field.append(text);
     }
 }
