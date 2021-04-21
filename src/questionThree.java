@@ -12,10 +12,10 @@ import java.io.*;
 import java.text.MessageFormat;
 import java.util.Enumeration;
 import java.util.Objects;
+import java.util.Scanner;
+
 import static java.lang.Integer.parseInt;
 
-// TODO Add JMenu to add a vehicle or search and pull up a vehicle
-// Would involve using two JFrames, and a switch in the JMenu to set the base window
 public class questionThree {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
@@ -28,16 +28,15 @@ public class questionThree {
         frame.setVisible(true);
     }
     private static void createParentUI(JFrame frame) {
-        // TODO reformat the method to make it more readable and fix the makeActive method
-
-        JTextField fieldID = new JTextField();
-        JTextField modelField = new JTextField();
-        JTextField amountOfOwnersField = new JTextField();
-        JTextField MPG = new JTextField();
+        JTextField fieldID = new JTextField("Car ID");
+        JTextField modelField = new JTextField("Model of vehicle");
+        JTextField amountOfOwnersField = new JTextField("# of owners");
+        JTextField MPG = new JTextField("Miles per gallon");
         JTextArea carData = new JTextArea();
+        JTextField fileName = new JTextField("Name of file");
 
-        JComboBox<Integer> box = new JComboBox<Integer>(rectQ3.years);
-        JComboBox<String> MakeBox = new JComboBox<String>(rectQ3.make);
+        JComboBox<Integer> box = new JComboBox<>(rectQ3.years);
+        JComboBox<String> MakeBox = new JComboBox<>(rectQ3.make);
 
         JRadioButton condition_new = new JRadioButton("New");
         JRadioButton condition_used = new JRadioButton("Used");
@@ -48,11 +47,13 @@ public class questionThree {
 
         JButton submit = new JButton("Submit");
         JButton retrieveCarID = new JButton("Get IDs");
+        JButton submitFileName = new JButton("Submit Name");
 
         makeActive(fieldID, "Car ID");
         makeActive(modelField, "Model of vehicle");
         makeActive(amountOfOwnersField, "# of owners");
         makeActive(MPG, "Miles per gallon");
+        makeActive(fileName, "Name of file");
 
         fieldID.setBounds(rectQ3.ID_RECT);
         box.setBounds(rectQ3.comboBox_RECT);
@@ -65,6 +66,8 @@ public class questionThree {
         submit.setBounds(rectQ3.submitButton);
         retrieveCarID.setBounds(rectQ3.carIDListButton);
         carData.setBounds(rectQ3.carData);
+        fileName.setBounds(rectQ3.fileName_RECT);
+        submitFileName.setBounds(rectQ3.fileNameSubmit_RECT);
 
         carData.setEditable(false);
 
@@ -78,6 +81,16 @@ public class questionThree {
             writeInfoToFile(fileData, vehicle);
         });
         retrieveCarID.addActionListener(e -> parseCarsAndUpdateUI(carData));
+        submitFileName.addActionListener(e -> {
+            try {
+                dataRetrieval(fileName.getText(), carData);
+            } catch (FileNotFoundException fileNotFoundException) {
+                String message = "The file was not found, make sure that it exists then try again!";
+                JOptionPane.showMessageDialog(new JFrame(), message, "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+                fileNotFoundException.printStackTrace();
+            }
+        });
 
         frame.add(fieldID);
         frame.add(box);
@@ -90,6 +103,8 @@ public class questionThree {
         frame.add(carData);
         frame.add(submit);
         frame.add(retrieveCarID);
+        frame.add(fileName);
+        frame.add(submitFileName);
 
     }
     private static void writeInfoToFile(String data, car records) {
@@ -193,6 +208,15 @@ public class questionThree {
             field.append(file.getName() + "\n");
         }
     }
+    private static void dataRetrieval(String fileName, JTextArea field) throws FileNotFoundException {
+        File file = new File(System.getProperty("user.dir") + "/cars/" + fileName);
+        Scanner fileReader = new Scanner(file);
+        field.setText("");
+        while (fileReader.hasNextLine()) {
+            String data = fileReader.nextLine();
+            field.append(data + "\n");
+        }
+    }
 }
 class rectQ3 {
     static Rectangle ID_RECT = new Rectangle(5, 5, 250, 25);
@@ -207,6 +231,9 @@ class rectQ3 {
 
     static Rectangle carData = new Rectangle(300, 5, 350, 350);
     static Rectangle carIDListButton = new Rectangle(300, 360, 125, 25);
+
+    static Rectangle fileName_RECT = new Rectangle(5, 300, 250, 25);
+    static Rectangle fileNameSubmit_RECT = new Rectangle(5, 330, 100, 25);
 
     static Integer[] years = new Integer[]{2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012,
             2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020};
