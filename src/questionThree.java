@@ -6,7 +6,6 @@ import java.io.*;
 import java.text.MessageFormat;
 import java.util.Enumeration;
 import java.util.Objects;
-
 import static java.lang.Integer.parseInt;
 
 class rectQ3 {
@@ -20,6 +19,9 @@ class rectQ3 {
     static Rectangle MPG_RECT = new Rectangle(5, 215, 250, 25);
     static Rectangle submitButton = new Rectangle(5, 250, 100, 25);
 
+    static Rectangle carData = new Rectangle(300, 5, 350, 350);
+    static Rectangle carIDListButton = new Rectangle(300, 360, 125, 25);
+
     static Integer[] years = new Integer[]{2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012,
             2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020};
     static String[] make = new String[]{"Abarth", "Alfa Romeo", "Aston Martin", "Audi", "Bentley", "Bayerische Motoren Werke AG (BMW)", "Bugatti",
@@ -29,7 +31,8 @@ class rectQ3 {
             "Milton Greasley (MG)", "Mini", "Mitsubishi", "Morgan", "Nissan", "Noble", "Pagani", "Peugeot", "Porsche", "Proton", "Renault",
             "Rolls-Royce", "Saab", "Seat", "Skoda", "Smart", "Subaru", "Suzuki", "Tata", "Toyota", "Vaushall", "Volkswagen", "Volvo"};
 }
-
+// TODO Add JMenu to add a vehicle or search and pull up a vehicle
+// Would involve using two JFrames, and a switch in the JMenu to set the base window
 public class questionThree {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
@@ -41,7 +44,6 @@ public class questionThree {
         frame.setTitle("Car Inventory");
         frame.setVisible(true);
     }
-
     private static void createParentUI(JFrame frame) {
         JTextField fieldID = new JTextField();
         makeActive(fieldID, "Car ID");
@@ -77,6 +79,13 @@ public class questionThree {
         JButton submit = new JButton("Submit");
         submit.setBounds(rectQ3.submitButton);
 
+        JButton retrieveCarID = new JButton("Get IDs");
+        retrieveCarID.setBounds(rectQ3.carIDListButton);
+
+        JTextArea carData = new JTextArea();
+        carData.setBounds(rectQ3.carData);
+        carData.setEditable(false);
+
         frame.add(fieldID);
         frame.add(box);
         frame.add(MakeBox);
@@ -85,6 +94,7 @@ public class questionThree {
         frame.add(condition_new);
         frame.add(condition_used);
         frame.add(MPG);
+        frame.add(carData);
 
         frame.repaint();
 
@@ -93,12 +103,14 @@ public class questionThree {
                     fieldID.getText(), box.getSelectedItem(), MakeBox.getSelectedItem(), modelField.getText(), amountOfOwnersField.getText(),
                     getSelection(group), MPG.getText());
             Integer val = parseInt(box.getSelectedItem().toString());
-            System.out.println(val);
             car vehicle = new car(parseInt(fieldID.getText()), val, (String) Objects.requireNonNull(MakeBox.getSelectedItem()),
                     modelField.getText(), parseInt(amountOfOwnersField.getText()), getSelection(group), parseInt(MPG.getText()));
             writeInfoToFile(fileData, vehicle);
         });
         frame.add(submit);
+
+        retrieveCarID.addActionListener(e -> parseCarsAndUpdateUI(carData));
+        frame.add(retrieveCarID);
 
     }
     private static void writeInfoToFile(String data, car records) {
@@ -115,7 +127,7 @@ public class questionThree {
     }
     private static void writeBufferedWriter(String data, String getDirectory, String getFileName) throws IOException {
         String errorPath = System.getProperty("user.dir") + "\\ERROR-CACHE\\ERROR-1.txt";
-        String path = System.getProperty("user.dir") + getDirectory + getFileName + ".txt";
+        String path = System.getProperty("user.dir") + getDirectory + getFileName;
         File dir = new File(System.getProperty("user.dir"), "car");
         if (!dir.exists()) {
             dir.mkdir();
@@ -149,7 +161,7 @@ public class questionThree {
         String errorPath = System.getProperty("user.dir") + "\\ERROR-CACHE\\ERROR-1.txt";
 
         try {
-            File myOBJ = new File(System.getProperty("user.dir") + "/cars/" + getName + ".txt");
+            File myOBJ = new File(System.getProperty("user.dir") + "/cars/" + getName);
             if (myOBJ.createNewFile()) {
                 System.out.println("File created: " +  myOBJ.getName());
                 return "File Created";
@@ -196,6 +208,16 @@ public class questionThree {
             }
         }
         return "NULL";
+    }
+    private static void parseCarsAndUpdateUI(JTextArea field) {
+        field.setText("");
+        String path = System.getProperty("user.dir") + "/cars/";
+        File dir = new File(path);
+        File[] files = dir.listFiles();
+        assert files != null;
+        for (File file : files) {
+            field.append(file.getName() + "\n");
+        }
     }
 }
 record car(int ID, Integer year, String make, String model, int amountOfOwners, String condition, int milesPerGallon) { }
