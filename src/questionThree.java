@@ -1,3 +1,9 @@
+/*
+ * Author: Joshua Estes
+ * Date April 21 2021
+ * Status: INCOMPLETE
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
@@ -45,6 +51,8 @@ public class questionThree {
         frame.setVisible(true);
     }
     private static void createParentUI(JFrame frame) {
+        // TODO reformat the method to make it more readable and fix the makeActive method
+
         JTextField fieldID = new JTextField();
         makeActive(fieldID, "Car ID");
         fieldID.setBounds(rectQ3.ID_RECT);

@@ -1,3 +1,9 @@
+/**
+ * Author: Joshua Estes
+ * Date April 21 2021
+ * Status: COMPLETE
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
