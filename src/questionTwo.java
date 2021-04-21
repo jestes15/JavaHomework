@@ -6,16 +6,13 @@ import java.awt.*;
 
 final class rect {
     static Rectangle r1 = new Rectangle(470, 95, 150, 25);
-
     static Rectangle r2 = new Rectangle(5, 35, 75, 25);
     static Rectangle r3 = new Rectangle(90, 35, 75, 25);
     static Rectangle r4 = new Rectangle(5, 100, 300, 303);
-
     static Rectangle TITLE_RECT = new Rectangle(350, 35, 115, 25);
     static Rectangle AUTHOR_RECT = new Rectangle(350, 65, 115, 25);
     static Rectangle PRICE_RECT = new Rectangle(350, 95, 115, 25);
     static Rectangle ISBN_RECT = new Rectangle(350, 125, 115, 25);
-
     static Rectangle SUBMIT = new Rectangle(470, 125, 85, 25);
     static Rectangle PEEK_DATA_RECT = new Rectangle(350, 160, 150, 150);
 }
