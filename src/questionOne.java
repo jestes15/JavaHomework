@@ -11,12 +11,6 @@ import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class string_info {
-    public double val1;
-    public double val2;
-    public String operatorID;
-}
-
 public class questionOne {
     public static void main(String[] args) {
         Rectangle r = new Rectangle();
@@ -345,4 +339,9 @@ public class questionOne {
 
         frame.setJMenuBar(menuBar);
     }
+}
+class string_info {
+    public double val1;
+    public double val2;
+    public String operatorID;
 }
