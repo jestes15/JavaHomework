@@ -79,6 +79,7 @@ public class questionThree {
             car vehicle = new car(parseInt(fieldID.getText()), val, (String) Objects.requireNonNull(MakeBox.getSelectedItem()),
                     modelField.getText(), parseInt(amountOfOwnersField.getText()), getSelection(group), parseInt(MPG.getText()));
             writeInfoToFile(fileData, vehicle);
+            parseCarsAndUpdateUI(carData);
         });
         retrieveCarID.addActionListener(e -> parseCarsAndUpdateUI(carData));
         submitFileName.addActionListener(e -> {
@@ -93,6 +94,7 @@ public class questionThree {
         });
 
         frame.add(fieldID);
+        frame.add(box);
         frame.add(box);
         frame.add(MakeBox);
         frame.add(modelField);
@@ -122,7 +124,7 @@ public class questionThree {
     private static void writeBufferedWriter(String data, String getDirectory, String getFileName) throws IOException {
         String errorPath = System.getProperty("user.dir") + "\\ERROR-CACHE\\ERROR-1.txt";
         String path = System.getProperty("user.dir") + getDirectory + getFileName;
-        File dir = new File(System.getProperty("user.dir"), "car");
+        File dir = new File(System.getProperty("user.dir"), "cars");
         if (!dir.exists()) {
             System.out.print(dir.mkdir());
         }
